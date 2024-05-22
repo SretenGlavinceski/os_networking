@@ -1,0 +1,5 @@
+FROM eclipse-temurin
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+RUN javac -d . ./tcp_connection/*.java
+CMD ["java", "tcp_connection.TCPClient"]

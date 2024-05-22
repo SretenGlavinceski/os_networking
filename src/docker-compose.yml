@@ -1,0 +1,69 @@
+version: '3'
+services:
+  tcp_server:
+    build:
+      context: .
+      dockerfile: Dockerfile-tcp-server
+
+    environment:
+      - TCP_SERVER_PORT=8050
+
+    volumes:
+      - ./data:/usr/src/myapp/data
+
+    networks:
+      - tcp-app-network
+
+  tcp_client:
+    build:
+      context: .
+      dockerfile: Dockerfile-tcp-client
+
+    environment:
+      - TCP_SERVER_PORT=8050
+      - TCP_SERVER_NAME=tcp_server
+
+    networks:
+      - tcp-app-network
+
+    depends_on:
+      - tcp_server
+
+    deploy:
+      replicas: 5
+
+
+  udp_server:
+    build:
+      context: .
+      dockerfile: Dockerfile-udp-server
+
+    environment:
+      - UDP_SERVER_PORT=7070
+
+    networks:
+      - udp-app-network
+
+  udp_client:
+    build:
+      context: .
+      dockerfile: Dockerfile-udp-client
+
+    environment:
+      - UDP_SERVER_PORT=7070
+      - UDP_SERVER_NAME=udp_server
+
+    networks:
+      - udp-app-network
+
+    depends_on:
+      - udp_server
+
+    deploy:
+      replicas: 5
+
+networks:
+  tcp-app-network:
+    driver: bridge
+  udp-app-network:
+    driver: bridge

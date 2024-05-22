@@ -1,0 +1,5 @@
+FROM eclipse-temurin
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+RUN javac -d . ./udp_connection/*.java
+CMD ["java", "udp_connection.UDPClient"]
